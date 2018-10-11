@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="tmpl/header :: header_meta">
+</head>
+<body style="background-color:#f2f2f2;">
+<nav th:replace="tmpl/header :: breadcrumb('IM','IM')"></nav>
+<div class="col-sm-3" id="im-left">
+    <input type="hidden" name="loginName" th:value="${user.loginName}"/>
+    <input type="hidden" name="userId" th:value="${user.userId}"/>
+    <dl style="background-color:#f2f2f2;">
+        <dt class="im-user-title">Upper</dt>
+        <dd>
+            <a class="im-user-item" th:if="${leader ne null}" th:data-id="${leader.userId}">
+                <img class="avatar" th:src="@{leader.avatar}"/>
+                <span class="rt">
+                    <span class="text" th:text="${leader.loginName}"></span>
+                    <span class="text"></span>
+                </span>
+                <span class="clear"></span>
+                <span class="tag">0</span>
+            </a>
+        </dd>
+    </dl>
+
+    <dl style="background-color:#f2f2f2;">
+        <dt class="im-user-title">Subordinates</dt>
+        <dd th:each="item,itemStat : ${lst}">
+            <a class="im-user-item" th:data-id="${item.userId}">
+                <img class="avatar" th:src="@{item.avatar}"/>
+                <span class="rt">
+                    <span class="text" th:text="${item.loginName}"></span>
+                    <span class="text"></span>
+                </span>
+                <span class="clear"></span>
+                <span class="tag">0</span>
+            </a>
+        </dd>
+    </dl>
+</div>
+<div class="col-sm-9" id="im-rt" style="border-left:1px solid #ddd;">
+    <div id="im_record" style="height:80%;border-bottom:1px solid #ddd;background-color:white;overflow-y:scroll;">
+
+    </div>
+    <div style="height:20%;position: relative;left:0;top:0;">
+        <div id="send">
+            <textarea style="width:100%;height:100%;display:block;"></textarea>
+        </div>
+        <button id="btn-send">Send</button>
+    </div>
+</div>
+<footer th:include="tmpl/footer :: footer_script"></footer>
+
+<script type="text/javascript">
+    var friend_name= "";
+    var friend_id = "";
+    var user_name = $("input[name='loginName']").val();
+    var user_id = $("input[name='userId']").val();
+    var unread_msg = {};
+    var websocket = null;
+    $(function(){
+        websocket = socket_init();
+        im_init();
+        $(".im-user-item").click(function(){
+           im_open($(this).attr("data-id"));
+           friend_id = $(this).attr("data-id");
+           friend_name = $(this).find(".text").eq(0).html();
+        });
+
+        $("#btn-send").click(function(){
+           im_send();
+        });
+    });
+
+    function im_send(){
+        var id = friend_id;
+        var msg = $("textarea").val();
+        $("textarea").val("");
+        var text = JSON.stringify({chatTo:id,text:msg});
+        console.log("消息发送：" + text);
+        websocket.send(text);
+
+        im_push([{
+            chatFrom:user_id,
+            text:msg,
+            createDate:new Date().toLocaleTimeString()
+        }],friend_id);
+
+
+
+    }
+
+    function im_push_item(item){
+        var record = $("#im_record");
+        if(item['chatFrom'] == user_id){
+            record.append("" +
+                "<div class='record-item record-send'>" +
+                "   <p class='title'>"+user_name + "&nbsp;" + item['createDate']+"</p>" +
+                "   <p class='im-msg'>"+item['text']+"</p>" +
+                "</div>" +
+                "");
+        }else{
+            record.append("" +
+                "<div class='record-item record-recv'>" +
+                "   <p class='title'>"+friend_name + "&nbsp;" + item['createDate']+"</p>" +
+                "   <p class='im-msg'>"+item['text']+"</p>" +
+                "</div>" +
+                "");
+        }
+    }
+
+
+    function im_push(data){
+        var record = $("#im_record");
+        if(data.length ==0){
+            record.append("<p style='text-align:center;color:#888;margin:20px auto;'>No news!</p>")
+        }else{
+            for(var x = 0;x<data.length;x++){
+                im_push_item(data[x]);
+            }
+        }
+        im_tobtm();
+    }
+
+    function im_tobtm(){
+        var record = $("#im_record");
+        record.scrollTop(99999);
+    }
+
+    function im_clear(){
+        var record = $("#im_record");
+        record.html("");
+    }
+
+    function im_open(id){
+        $.ajax({
+            url:"/staff/im/record",
+            data:{id:id},
+            dataType:'json',
+            success:function(data){
+                im_clear();
+                im_push(data['result_arr']['msg']);
+            }
+        })
+    }
+
+
+    function im_init(){
+        var nav_height = 40;
+        var body_height = $(document.body).height();
+        $("#im-left").height(body_height-nav_height);
+        $("#im-rt").height(body_height-nav_height);
+    }
+
+
+    function socket_init(){
+        var websocket = null;
+
+        //判断当前浏览器是否支持WebSocket
+        if('WebSocket' in window){
+            websocket = new WebSocket("ws://localhost:8080/websocket");
+        }
+        else{
+            alert('Not support websocket')
+        }
+
+        //连接发生错误的回调方法
+        websocket.onerror = function(){
+            setMessageInnerHTML("error");
+        };
+
+        //连接成功建立的回调方法
+        websocket.onopen = function(event){
+            setMessageInnerHTML("open");
+        }
+
+        //接收到消息的回调方法
+        websocket.onmessage = function(event){
+            console.log(event.data);
+            im_recv(JSON.parse(event.data));
+        }
+
+        //连接关闭的回调方法
+        websocket.onclose = function(){
+            setMessageInnerHTML("close");
+        }
+        return websocket;
+    }
+
+    function setMessageInnerHTML(info){
+        console.log(info);
+    }
+
+    function im_recv(data){
+        console.log(friend_id);
+        console.log(data['chatFrom']+ ":" + data.chatFrom);
+        if(friend_id == data['chatFrom']){
+            im_push_item(data);
+        }else{
+            var tag = $("a[data-id='"+data['userId']+"']").find("span.tag");
+            var count = parseInt(tag);
+            count = count+1;
+            tag.html(count);
+        }
+    }
+
+</script>
+</body>
+</html>

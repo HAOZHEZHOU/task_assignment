@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="tmpl/header :: header_meta">
+</head>
+<body>
+<nav th:replace="tmpl/header :: breadcrumb('System','Role List')"></nav>
+<article class="page-container">
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="l">
+            <a th:href="@{/admin/role/add}"  class="btn btn-primary radius">
+                <i class="Hui-iconfont">&#xe600;</i> New Role
+            </a>
+        </span>
+        <span class="r">Count：<strong th:text="${list.size()}"></strong> </span>
+    </div>
+    <div class="mt-20">
+
+        <table class="table table-border table-bordered table-hover table-bg table-sort">
+            <thead>
+            <tr class="text-c">
+                <th width="80">Id</th>
+                <th width="100">Title</th>
+                <th width="">Description</th>
+                <th width="100">Operation</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="text-c" th:each="item,itemStat : ${list}">
+                <td th:text="${item.id}"></td>
+                <td th:text="${item.name}"></td>
+                <td th:text="${item.description}"></td>
+                <td class="td-manage">
+
+                    <a title="Edit" th:href="@{/admin/role/edit?id={id}(id=${item.id})}"  class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
+                    <a title="Delete" th:href="@{/admin/role/delete?id={id}(id=${item.id})}" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</article>
+<footer th:replace="tmpl/footer :: footer_script"></footer>
+<script type="text/javascript">
+    $(function(){
+
+    });
+</script>
+</body>
+</html>

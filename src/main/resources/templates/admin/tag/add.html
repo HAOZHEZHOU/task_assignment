@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="tmpl/header :: header_meta">
+</head>
+<body>
+<nav th:replace="tmpl/header :: breadcrumb('Tag','Add')"></nav>
+<article class="page-container">
+    <form  th:action="@{/admin/tag/do_add}" method="post" class="form form-horizontal" id="form-member-add" >
+        <div class="row cl" id="prev_num">
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>Tag Title：</label>
+                <div class="formControls col-xs-4 col-sm-4">
+                    <input type="text" class="input-text"   placeholder="" name="tagName">
+                </div>
+            </div>
+            <input type="hidden" name="fkTable" value="task" />
+            <input type="hidden" name="fkName" value="task_id" />
+            <input type="hidden" name="fkId" value="0" />
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;Submit&nbsp;&nbsp;">
+            </div>
+        </div>
+    </form>
+</article>
+
+<footer th:include="tmpl/footer :: footer_script"></footer>
+
+<script type="text/javascript">
+    $(function(){
+
+    });
+</script>
+</body>
+</html>

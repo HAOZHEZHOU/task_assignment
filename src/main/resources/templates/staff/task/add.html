@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="tmpl/header :: header_meta">
+</head>
+<body>
+<nav th:replace="tmpl/header :: breadcrumb('Task','Add')"></nav>
+<article class="page-container">
+    <form  th:action="@{/staff/task/do_add}" method="post" class="form form-horizontal" id="form-member-add" >
+        <div class="row cl" id="prev_num">
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>Title：</label>
+                <div class="formControls col-xs-4 col-sm-4">
+                    <input type="text" class="input-text"   placeholder="" name="taskName">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>Content：</label>
+                <div class="formControls col-xs-4 col-sm-4">
+                    <textarea class="input-text" rows="4" style="height:auto;"   placeholder="" name="taskContent"></textarea>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>To：</label>
+                <div class="formControls col-xs-4 col-sm-4">
+                    <select class="input-text" name="taskTo">
+                        <option th:each="item,itemStat : ${userList}" th:value="${item.userId}" th:text="${item.loginName}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <input type="hidden" name="pid" th:value="${id}" />
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;Submit&nbsp;&nbsp;">
+            </div>
+        </div>
+    </form>
+</article>
+
+<footer th:include="tmpl/footer :: footer_script"></footer>
+
+<script type="text/javascript">
+    $(function(){
+
+    });
+</script>
+</body>
+</html>

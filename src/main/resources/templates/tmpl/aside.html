@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html  xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<body>
+
+<div th:fragment="admin_aside"  >
+    <aside class="Hui-aside">
+        <div class="menu_dropdown bk_2">
+            <dl id="menu-member">
+                <dt><i class="Hui-iconfont">&#xe60d;</i> System<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+                <dd>
+                    <ul>
+                        <li><a data-href="http://localhost:8080/admin/user/lst?r=2" data-title="Staff" href="javascript:;">Staff Management</a></li>
+                        <!--<li><a data-href="/admin/role/lst" data-title="工作组管理" href="javascript:;">工作组管理</a></li>-->
+                        <!--<li><a data-href="/admin/tag/lst" data-title="Tag" href="javascript:;">Tag</a></li>-->
+                        <li><a data-href="/admin/task/user_tree" data-title="Task" href="javascript:;">Task Tree</a></li>
+                    </ul>
+                </dd>
+            </dl>
+        </div>
+    </aside>
+    <div class="dislpayArrow hidden-xs"><a class="pngfix" href="javascript:void(0);" onClick="displaynavbar(this)"></a></div>
+</div>
+
+<div th:fragment="staff_aside"  >
+    <aside class="Hui-aside">
+        <div class="menu_dropdown bk_2">
+            <dl id="menu-im">
+                <dt><i class="Hui-iconfont">&#xe60d;</i> IM<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+                <dd>
+                    <ul>
+                        <li><a data-href="/staff/im/index" data-title="IM" href="javascript:;">IM Index</a></li>
+                    </ul>
+                </dd>
+            </dl>
+            <dl id="menu-task">
+                <dt><i class="Hui-iconfont">&#xe60d;</i> Task System<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+                <dd>
+                    <ul>
+                        <li><a data-href="/staff/task/pub_lst" data-title="Personal Task Pub List" href="javascript:;">Pub List</a></li>
+                        <li><a data-href="/staff/task/recv_lst" data-title="Personal Task Receive List" href="javascript:;">Receive List</a></li>
+                    </ul>
+                </dd>
+            </dl>
+        </div>
+    </aside>
+    <div class="dislpayArrow hidden-xs"><a class="pngfix" href="javascript:void(0);" onClick="displaynavbar(this)"></a></div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="tmpl/header :: header_meta">
+</head>
+<body>
+<nav th:replace="tmpl/header :: breadcrumb('Task','Detail')"></nav>
+<article class="page-container">
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="l">
+            <a th:href="@{/staff/task/add_record?id={id}(id=${item.taskId})}"  class="btn btn-primary radius">
+                <i class="Hui-iconfont">&#xe600;</i> Add Record
+            </a>
+        </span>
+    </div>
+    <div class="mt-20">
+
+        <div class="panel panel-default">
+            <div class="panel-header">Task Detail</div>
+            <div class="panel-body">
+                <table class="table table-border table-bordered table-hover table-bg table-sort">
+                    <thead>
+                    <tr class="text-c">
+                        <th width="">Title</th>
+                        <th>Content</th>
+                        <th width="200">Datetime</th>
+                        <!--<th width="300">操作</th>-->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="text-c" >
+                        <td th:text="${item.taskName}" ></td>
+                        <td th:text="${item.taskContent}" ></td>
+                        <td th:text="${#dates.format(item.createDate,'yyyy-mm-dd HH:mm:ss')}"></td>
+                        <!--<td class="td-manage">
+                            &lt;!&ndash;<a title="详情" th:href="@{/staff/task/deail?id={id}(id=${item.taskId})}"  class="ml-5" style="text-decoration:none">详细信息</a>
+                            <a title="编辑" th:href="@{/staff/task/edit?id={id}(id=${item.taskId})}"  class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i>编辑</a>
+                            <a title="删除" th:href="@{/staff/task/delete?id={id}(id=${item.taskId})}" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i>删除</a>&ndash;&gt;
+                        </td>-->
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+        <div class="panel panel-default" style="margin-top:20px;">
+            <div class="panel-header">Record List</div>
+            <div class="panel-body">
+                <table class="table table-border table-bordered table-hover table-bg table-sort">
+                    <thead>
+                    <tr class="text-c">
+                        <th width="200">From</th>
+                        <th width="">Info</th>
+                        <th width="200">Datetime</th>
+                        <th width="200">Attachment</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="text-c" th:each="record,recordStat:${list}" >
+                        <td th:text="${record.loginName}" th:classappend="${record.userId==user.userId?'record-self':'record-others'}"></td>
+                        <td th:text="${record.text}"></td>
+                        <td th:text="${#dates.format(record.createDate,'yyyy-MM-dd HH:mm:ss')}"></td>
+                        <td th:data-path="${record.path}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</article>
+<footer th:replace="tmpl/footer :: footer_script"></footer>
+<script type="text/javascript">
+    $(function(){
+        $("[data-path]").each(function(){
+           var path = $(this).attr("data-path");
+           var arr = path.split(",");
+           for(var x = 0 ; x < arr.length;x++){
+
+               if(arr[x].length == 0){continue;}
+
+               $(this).append("<a href='/staff/task/download?path="+encodeURI(arr[x])+"'>Download</a>");
+           }
+        });
+    });
+</script>
+</body>
+</html>

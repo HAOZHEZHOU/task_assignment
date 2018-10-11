@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="tmpl/header :: header_meta">
+</head>
+<body>
+<nav th:replace="tmpl/header :: breadcrumb('Task','Edit')"></nav>
+<article class="page-container">
+    <form  th:action="@{/staff/task/do_edit}" method="post" class="form form-horizontal" id="form-member-add" >
+        <div class="row cl" id="prev_num">
+            <input type="hidden" name="taskId" th:value="${item.taskId}" />
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>Title ：</label>
+                <div class="formControls col-xs-4 col-sm-4">
+                    <input type="text" class="input-text"   placeholder="" name="taskName" th:value="${item.taskName}">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>Content：</label>
+                <div class="formControls col-xs-4 col-sm-4">
+                    <textarea class="input-text" rows="4" style="height:auto;"   placeholder="" name="taskContent" th:text="${item.taskContent}"></textarea>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>To：</label>
+                <div class="formControls col-xs-4 col-sm-4">
+                    <select class="input-text" name="taskTo">
+                        <option th:each="user,itemStat : ${userList}" th:value="${user.userId}" th:text="${user.loginName}" th:selected="${user.userId eq item.taskTo}"></option>
+                    </select>
+                </div>
+            </div>
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;Submit&nbsp;&nbsp;">
+            </div>
+        </div>
+    </form>
+</article>
+
+<footer th:include="tmpl/footer :: footer_script"></footer>
+
+<script type="text/javascript">
+    $(function(){
+
+    });
+</script>
+</body>
+</html>

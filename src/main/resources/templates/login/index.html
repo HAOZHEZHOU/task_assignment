@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="tmpl/header :: header_meta">
+</head>
+<body>
+
+<div class="loginWrapr">
+    <div id="loginform" class="loginBox">
+        <form class="form form-horizontal" th:action="@{/login}" method="post">
+            <div class="row cl">
+                <label class="form-label col-xs-3"><i class="fa fa-user"></i></label>
+                <div class="formControls col-xs-8">
+                    <input id="tel" name="login_name" type="text" placeholder="Account" value="admin" class="input-text size-L">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-3"><i class="fa fa-key"></i></label>
+                <div class="formControls col-xs-8">
+                    <input id="pwd" name="login_pwd" type="password" placeholder="Password" value="123" class="input-text size-L">
+                </div>
+            </div>
+            <div class="row cl">
+                <div class="formControls col-xs-8 col-xs-offset-3">
+                    <input name="" type="submit" class="btn btn-success radius size-L" value="&nbsp;Login&nbsp;">
+                    <input name="" type="reset" class="btn btn-default radius size-L" value="&nbsp;Submit&nbsp;">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<footer th:include="tmpl/footer :: footer_script"></footer>
+</body>
+</html>

@@ -1,0 +1,114 @@
+@charset "utf-8";
+/* 你自己的样式 */
+.im-user-item{
+    border-bottom:1px dashed #ddd;display:block;width:90%;margin-left:10%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    background-color:#f2f2f2;
+    position:relative;left:0;top:0;
+}
+.clear{clear:both;display:block;height:0;line-height:0;visibility: hidden;}
+.im-user-item img.avatar{
+    display:block;width:40px;height:40px;margin:10px;border-radius:50%;float:left;border:1px solid #ddd;
+
+}
+.im-user-item .rt{
+    display:block;width:auto;margin-left:65px;padding:5px 15px 5px 5px;
+}
+.im-user-item span.text{
+    display:block;height:20px;line-height:20px;
+}
+.im-user-title{
+    height:60px;line-height:60px;text-indent:1em;background-color:#eee;
+}
+#btn-send{position:absolute;right:0;bottom:0;}
+.record-send{
+    color:#3b9e3b;
+}
+.record-recv{
+    color:#0e90d2;
+}
+.im-user-item .tag{
+    position:absolute;right:10px;top:10px;display:inline-block;
+    padding:0 .5em;background-color:#0e90d2;color:white;line-height:1.7em;height:1.7em;
+}
+.record-others{
+    color:#0e90d2;
+}
+.record-self{
+    color:#3b9e3b;
+}
+.record-item{
+    padding:.5em 1em;
+}
+.record-item .title{
+    margin-bottom:.2em;
+}
+.record-item .im-msg{
+    padding-left:1.3em;
+}
+.tree-item *{font-size:14px;}
+.tree-title{display:inline-block;height:1.7em;}
+.tree-item{
+    display:block;line-height:1.7em;
+}
+.tree-icon{
+    display:inline-block;width:18px;
+    background-image: url(/lib/h-ui.admin/images/metro.png);
+    background-repeat: no-repeat;
+    float:left;
+    height:19px;
+}
+.tree-node{
+    padding:0 0 0 18px;
+    background-image: url(/lib/h-ui.admin/images/line_conn.gif);
+    background-repeat: repeat-y;
+}
+.tree-show{
+    background-position:-129px 1px
+}
+.tree-nochild{
+    background-position: -3px -20px;
+}
+.tree-hide{
+    background-position: -108px 1px;
+}
+.task-item p{
+    display:block;
+    background-color: #eee;
+    padding:.5em 1em;
+    margin-bottom:0;
+}
+.task-item .on{
+    display:none;
+}
+.file-item{
+    padding:.2em .5em .3em 1em;
+    background-color: #f6f6f6;
+    border-bottom:1px dashed #eee;
+}
+.file-item a{
+    display:inline-block;line-height:1.7em;
+}
+.file-item .download{
+    float:right;
+}
+
+.text-warning{color:#b94a48;line-height:1.7em;padding:.2em 1em;}
+
+.search-form{position:relative;left:0;top:0;}
+#search-result{
+    position: absolute;
+    left: 93px;
+    top: 40px;
+    border: 1px solid #ddd;
+    min-height: 18px;
+    width: 298px;
+    z-index: 1000;
+    background-color: white;
+    display: none;
+}
+#search-result a.item{
+    display:block;width:100%;line-height:1.7em;padding:.3em 1em;border-bottom:1px solid #ddd;
+}

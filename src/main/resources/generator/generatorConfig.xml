@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+       <context id="DB2Tables"    targetRuntime="MyBatis3">
+              <commentGenerator>
+                     <property name="suppressDate" value="false"/>
+                     <property name="suppressAllComments" value="true"/>
+              </commentGenerator>
+
+              <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://127.0.0.1:3306/tmwk" userId="root" password="123456">
+              </jdbcConnection>
+              <javaTypeResolver>
+                     <property name="forceBigDecimals" value="false"/>
+              </javaTypeResolver>
+
+              <javaModelGenerator targetPackage="com.yc.tmwk.model" targetProject="src/main/java">
+                     <property name="enableSubPackages" value="true"/>
+                     <property name="trimStrings" value="true"/>
+              </javaModelGenerator>
+
+              <sqlMapGenerator targetPackage="mapping" targetProject="src/main/resources">
+                     <property name="enableSubPackages" value="true"/>
+              </sqlMapGenerator>
+
+
+              <javaClientGenerator type="ANNOTATEDMAPPER" targetPackage="com.yc.tmwk.dao" targetProject="src/main/java">
+                     <property name="enableSubPackages" value="true"/>
+              </javaClientGenerator>
+              <table tableName="attachment" domainObjectName="Attachment" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
+              <table tableName="chat" domainObjectName="Chat" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
+              <table tableName="comments" domainObjectName="Comments" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
+              <table tableName="role" domainObjectName="Role" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
+              <table tableName="tag" domainObjectName="Tag" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
+              <table tableName="task" domainObjectName="Task" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
+              <table tableName="task_record" domainObjectName="TaskRecord" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
+              <table tableName="task_tag" domainObjectName="TaskTag" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
+              <table tableName="users" domainObjectName="Users" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
+              <table tableName="user_role" domainObjectName="UserRole" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
+       </context>
+</generatorConfiguration>

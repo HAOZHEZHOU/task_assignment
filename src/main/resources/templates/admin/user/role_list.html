@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="tmpl/header :: header_meta">
+</head>
+<body>
+<nav th:replace="tmpl/header :: breadcrumb('角色管理','角色管理')"></nav>
+<article class="page-container">
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="l">
+            <a id="saveRole" class="btn btn-primary radius">
+                <i class="Hui-iconfont">&#xe600;</i> 保存授权
+            </a>
+        </span>
+        <span class="r">共有数据：<strong th:text="${all.size()}"></strong> 条</span>
+    </div>
+    <div class="mt-20">
+        <form>
+            <input type="hidden" name="user_id" th:value="${param.id}"/>
+            <table class="table table-border table-bordered table-hover table-bg table-sort">
+                <thead>
+                <tr class="text-c">
+                    <th width="50"><input type="checkbox" /></th>
+                    <th width="80">编号</th>
+                    <th width="100">角色名称</th>
+                    <th width="">角色描述</th>
+                    <th width="160">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="text-c" th:each="item,itemStat : ${all}">
+                    <td th:name="${item.id}">
+                        <input type="checkbox" name="ids" th:value="${item.id}"/>
+                    </td>
+                    <td th:text="${item.id}"></td>
+                    <td th:text="${item.name}"></td>
+                    <td th:text="${item.description}"></td>
+                    <td class="td-manage">
+
+                        <a title="编辑" th:href="@{/admin/role/edit?id={id}(id=${item.id})}"  class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
+                        <a title="删除" th:href="@{/admin/role/delete?id={id}(id=${item.id})}" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
+        <div id="json" style="display:none;">
+            <span class="user_role" th:each="item,itemStat:${user_role}" th:id="${item.id}" th:text="${item.name}"></span>
+        </div>
+    </div>
+</article>
+<footer th:replace="tmpl/footer :: footer_script"></footer>
+<script type="text/javascript">
+    var user_role = [];
+    $(function(){
+        var item = $(".user_role");
+        for(var x = 0 ; x < item.length; x++){
+            user_role.push(item.eq(x).attr("id"));
+        }
+
+        // check the table
+
+        var all = $("input[name='ids']");
+        for(var x=0;x < all.length;x++){
+            var id = all.eq(x).val();
+            if(is_in_arr(id,user_role)){
+                all.eq(x).attr("checked","checked");
+            }
+        }
+
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        $(document).ajaxSend(function (e, xhr, options) {
+            xhr.setRequestHeader(header, token);
+        });
+
+        $("#saveRole").click(function(){
+            var ids = $("form").serialize();
+
+            $.ajax({
+                url:"/admin/user/save_roles?"+ids,
+                data:{},
+                dataType:"json",
+                type:"post",
+                success:function(data){
+                    console.log(data);
+                    alert(data['result_code']?'用户保存成功':data['result_msg']);
+                    setTimeout(function(){
+                        location.href = "/admin/user/lst";
+                    });
+                }
+            })
+        });
+
+    });
+
+    function is_in_arr(intx, intarr){
+        for(var x = 0 ; x < intarr.length; x++){
+            if(intx == intarr[x]){
+                return true;
+            }
+        }
+        return false;
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="tmpl/header :: header_meta">
+</head>
+<body>
+<nav th:replace="tmpl/header :: breadcrumb('Task','Receive List')"></nav>
+<article class="page-container">
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="l">
+
+        </span>
+        <span class="r">Count：<strong th:text="${list.size()}"></strong> 条</span>
+    </div>
+    <div class="mt-20">
+
+        <table class="table table-border table-bordered table-hover table-bg table-sort">
+            <thead>
+            <tr class="text-c">
+                <th width="100">Task state</th>
+                <th width="">Task title</th>
+                <th width="200">Publish datetime</th>
+                <th width="300">Operation</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="text-c" th:each="item,itemStat : ${list}" th:data-state="${item.state}">
+                <td ><span th:text="${(item.state==0)?'Unfinished':'Finished'}"></span></td>
+                <td th:text="${item.taskName}" ></td>
+                <td th:text="${item.createDate}"></td>
+                <td class="td-manage">
+                    <a title="详情" th:href="@{/staff/task/detail?id={id}(id=${item.taskId})}"  class="ml-5" style="text-decoration:none">Detail</a>
+                    <a title="编辑" th:href="@{/staff/task/add?id={id}(id=${item.taskId})}"  class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i>Pub sub task</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</article>
+<footer th:replace="tmpl/footer :: footer_script"></footer>
+<script type="text/javascript">
+    $(function(){
+
+    });
+</script>
+</body>
+</html>

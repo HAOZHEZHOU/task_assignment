@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="tmpl/header :: header_meta">
+</head>
+<body>
+<nav th:replace="tmpl/header :: breadcrumb('Task System','Publish List')"></nav>
+<article class="page-container">
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="l">
+            <a th:href="@{/staff/task/add}"  class="btn btn-primary radius">
+                <i class="Hui-iconfont">&#xe600;</i> New Task
+            </a>
+        </span>
+        <span class="r">Counts：<strong th:text="${list.size()}"></strong> </span>
+    </div>
+    <div class="mt-20">
+
+        <table class="table table-border table-bordered table-hover table-bg table-sort">
+            <thead>
+            <tr class="text-c">
+                <th width="100">Task state</th>
+                <th width="">Task title</th>
+                <th width="200">Datetime</th>
+                <th width="300">Operation</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="text-c" th:each="item,itemStat : ${list}" th:data-state="${item.state}">
+                <td ><span th:text="${(item.state==0)?'Unfinished':'Finished'}"></span></td>
+                <td th:text="${item.taskName}" ></td>
+                <td th:text="${item.createDate}"></td>
+                <td class="td-manage">
+                    <a title="Detail" th:href="@{/staff/task/detail?id={id}(id=${item.taskId})}"  class="ml-5" style="text-decoration:none">Detail</a>
+                    <a title="Edit" th:href="@{/staff/task/edit?id={id}(id=${item.taskId})}"  class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i>Edit</a>
+                    <a title="Edit" th:href="@{/staff/task/edit_tag?id={id}(id=${item.taskId})}"  class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i>edit tag</a>
+                    <a title="Delete" th:href="@{/staff/task/delete?id={id}(id=${item.taskId})}" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i>Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</article>
+<footer th:replace="tmpl/footer :: footer_script"></footer>
+<script type="text/javascript">
+    $(function(){
+
+    });
+</script>
+</body>
+</html>

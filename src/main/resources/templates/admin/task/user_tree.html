@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="tmpl/header :: header_meta">
+</head>
+<body>
+<nav th:replace="tmpl/header :: breadcrumb('System','User Tree')"></nav>
+<article class="page-container">
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="l" style="line-height:31px;">Task Search：</span>
+        <form   class="search-form">
+            <input type="text" placeholder="Please input the keywords " class="input-text ac_input" name="search_text" value="" id="search_text" autocomplete="off" style="width:300px">
+            <button type="submit" class="btn btn-default" id="search_button">Search</button>
+            <div id="search-result"></div>
+        </form>
+        <div class="clear"></div>
+    </div>
+    <div class="mt-20">
+        <div class="col-sm-4">
+            <div class="panel panel-default ">
+                <div class="panel-header">Subordinates</div>
+                <div class="panel-body" style="min-height:400px;">
+                    <ul id="tree-root"class="tree-node">
+                        <li th:each="item,itemStat:${list}" class="tree-item">
+                            <span class="tree-icon tree-show"></span><a class="tree-title" th:text="${item.loginName}" th:data-id="${item.userId}"></a>
+                            <span class="clear"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-sm-8">
+            <div class="panel panel-default">
+                <div class="panel-header">Task Detail</div>
+                <div id="taskDetail" class="panel-body" style="min-height:400px;"></div>
+            </div>
+
+        </div>
+        <div class="clear"></div>
+
+
+
+
+
+    </div>
+</article>
+<footer th:replace="tmpl/footer :: footer_script"></footer>
+<script type="text/javascript" th:src="@{/lib/autocomplete/autocomplete.js}"></script>
+<script type="text/javascript">
+    $(function(){
+
+
+        $("#tree-root").delegate(".tree-show","click",function(){
+            tree_child($(this).next(".tree-title"));
+            $(this).removeClass("tree-show").addClass("tree-hide");
+        });
+        $("#tree-root").delegate(".tree-hide","click",function(){
+            var obj = $(this).next(".tree-title");
+            var id  = obj.attr('data-id');
+            var ul = obj.next("ul.tree-node-"+ id);
+            ul.hide();
+            $(this).removeClass("tree-hide").addClass("tree-show");
+        });
+
+        $("#tree-root").delegate(".tree-title","click",function(){
+            var id = $(this).attr("data-id");
+            getTask(id);
+        });
+
+        $("#taskDetail").delegate(".show-file","click",function(){
+            var wrap = $(this).parent().siblings(".file-list")
+            console.log(wrap);
+            if($(this).attr('data-isget') == "false"){
+                getFileList($(this),wrap,$(this).attr("data-id"));
+            }
+            showFileList(wrap);
+        });
+
+        $("#search_text").focusin(function(){
+            $("#search-result").show();
+        });
+       /* $("form").focusout(function(){
+            $("#search-result").hide();
+        });*/
+        $("#search_text").on("keydown",function(){
+            $("#search-result").html("");
+            $.ajax({
+                url:'/admin/task/task_search',
+                data:{q:$("#search_text").val()},
+                success:function(data){
+                    var wrap = $("#search-result");
+                    $.map(data,function(item){
+                        wrap.append("" +
+                            "<a class='item' href='/admin/task/detail?id="+item['taskId']+"'>" +
+                            "       "+item['taskName'] +
+                            "" +
+                            "</a>");
+                    })
+                }
+            })
+        });
+    });
+
+
+
+    function getFileList(obj,wrap,id){
+        var wraper = wrap;
+        $.ajax({
+            url:"/admin/task/task_file_list",
+            data:{id:id},
+            dataType:"json",
+            success:function(data){
+                obj.attr("data-isget","true");
+                var arr = data['arr'];
+                if(arr.length == 0){
+                    wraper.append("<div class='text-warning'>No Attachment！</div>")
+                }
+                for(var x = 0 ; x < arr.length;x++){
+                    var file_path = arr[x]['path'];
+                    file_path = file_path.substring(file_path.lastIndexOf('/')+1,file_path.length);
+                    var item = $("" +
+                        "<div class='file-item'>" +
+                        "    <a class='download' href='/admin/task/download?path="+encodeURI(arr[x]['path'])+"'>Download</a>" +
+                        "    <a href='/admin/task/download?path="+encodeURI(arr[x]['path'])+"'>"+file_path+"</a>" +
+                        "    <span class='clear'></span>" +
+                        "</div>");
+                    wraper.append(item);
+                }
+            }
+        })
+    }
+
+    function showFileList(obj){
+        if(obj.hasClass("on")){
+            obj.removeClass("on");
+        }else{
+            obj.addClass("on");
+        }
+    }
+
+    function getTask(id){
+        var wrap = $("#taskDetail");
+        wrap.html("");
+        $.ajax({
+            url:"/admin/task/user_task",
+            data:{id:id},
+            dataType:"json",
+            success:function(data){
+                var arr = data["arr"]
+                if(arr.length == 0){
+                    wrap.append("<div class='text-warning'>No Task！</div>")
+                }
+                for(var x =0 ; x < arr.length;x++){
+                    wrap.append("" +
+                        "<div class='task-item'>" +
+                        "  <p>" +
+                        "   <span style='float:right;' data-isget='false' class='show-file' data-id='"+arr[x]['taskId']+"'>Show Attachment</span>" +
+                        "   <span class='title'>"+arr[x]['taskName']+"</span>" +
+                        "   <span class='clear'></span>" +
+                        "  </p>" +
+                        "  <div class='file-list on'>" +
+                        "       " +
+                        "  </div>" +
+                        "" +
+                        "</div>" +
+                        "");
+                }
+            }
+        })
+
+
+    }
+
+
+    function tree_child_dom(item){
+        var dom = $("<li class='tree-item'>" +
+            "       <span class='tree-icon tree-show'></span>      " +
+            "       <a class='tree-title' data-id='"+item['userId']+"'>"+item['loginName']+"</a>" +
+            "       <span class='clear'></span>" +
+            "</li>");
+        return dom;
+    }
+
+    function tree_child(obj){
+        var id  = obj.attr('data-id');
+        var ul = obj.next("ul.tree-node-"+ id);
+        if(ul.length == 0){
+            ul = $("<ul class='tree-node tree-node-"+id+"'></ul>");
+            obj.after(ul);
+        }
+
+        if(ul.find("li").length == 0 && ul.attr("has-child")!="false"){
+            $.ajax({
+                url:"/admin/task/user_child",
+                data:{id:id},
+                dataType:'json',
+                success:function(data){
+                    var arr = data['arr'];
+                    if(arr.length == 0){
+                        ul.attr('has-child',"false");
+                        var a = ul.prev("a.tree-title").prev("span.tree-icon").removeClass("tree-hide").removeClass("tree-show").addClass("tree-nochild");
+                    }
+                    for(var x =0 ; x <arr.length;x++){
+                        ul.append(tree_child_dom(arr[x]));
+                    }
+                }
+            })
+        }
+
+        ul.show();
+    }
+</script>
+</body>
+</html>
